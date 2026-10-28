@@ -1,0 +1,13 @@
+{
+  "name": "RaahimFlix — Personal Media Companion",
+  "short_name": "RaahimFlix",
+  "description": "Personal movie discovery and authorized-source companion.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#090b11",
+  "theme_color": "#090b11",
+  "icons": [
+    { "src": "/assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

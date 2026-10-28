@@ -1,0 +1,9 @@
+import {json,currentUser,validPublicHttpsUrl} from '../_lib.js';
+export async function onRequestGet(context){
+ const user=await currentUser(context);if(!user)return json({error:'Sign in to use saved add-ons.'},401);
+ const requestUrl=new URL(context.request.url);const raw=requestUrl.searchParams.get('url')||'';const target=validPublicHttpsUrl(raw);if(!target)return json({error:'Use a public HTTPS add-on URL.'},400);
+ const isManifest=/\/manifest\.json$/i.test(target.pathname);const isResource=/\/(catalog|meta|stream|subtitles)\/(movie|series|tv|channel)\/[^/]+\.json$/i.test(target.pathname);
+ if(!isManifest&&!isResource)return json({error:'Only Stremio manifest, catalog, metadata, stream and subtitle endpoints are supported.'},400);
+ if(!isManifest){const row=await context.env.DB.prepare('SELECT config_json FROM user_config WHERE user_id=?').bind(user.id).first();let config={addons:[]};try{config=JSON.parse(row?.config_json||'{}')}catch{}const allowed=(config.addons||[]).some(a=>{try{return new URL(a.url).origin===target.origin}catch{return false}});if(!allowed)return json({error:'This add-on is not saved to your account.'},403);}
+ try{const upstream=await fetch(target.toString(),{method:'GET',redirect:'manual',headers:{Accept:'application/json','User-Agent':'RaahimFlix/1.0'}});if(upstream.status>=300&&upstream.status<400)return json({error:'The add-on redirected its request. Use its final HTTPS URL.'},502);if(!upstream.ok)return json({error:`Add-on returned HTTP ${upstream.status}.`},502);const text=await upstream.text();if(text.length>2_000_000)return json({error:'Add-on response is too large.'},413);let data;try{data=JSON.parse(text)}catch{return json({error:'Add-on did not return valid JSON.'},502)}return json(data,200,{'Cache-Control':'private, max-age=30'});}catch{return json({error:'Could not reach this add-on. Check the URL and provider status.'},502)}
+}

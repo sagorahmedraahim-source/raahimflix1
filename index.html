@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090b11">
+  <meta name="description" content="Your personal movie discovery and streaming companion.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <title>RaahimFlix — Discover</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" data-view="home" aria-label="RaahimFlix home">
+        <span class="brand-mark">R</span><span>raahim<span class="brand-accent">flix</span></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <button class="nav-link active" data-view="home">Home</button>
+        <button class="nav-link" data-view="discover">Discover</button>
+        <button class="nav-link" data-view="watchlist">My List</button>
+        <button class="nav-link" data-view="settings">Add-ons</button>
+      </nav>
+      <button class="icon-button" id="search-focus" aria-label="Search"><span class="search-glyph"></span></button>
+    </header>
+
+    <main>
+      <section id="home-view" class="view active">
+        <div class="hero">
+          <div class="hero-copy">
+            <span class="eyebrow"><span class="live-dot"></span> YOUR PERSONAL CINEMA</span>
+            <h1>Stories worth<br><span class="gradient-text">staying in for.</span></h1>
+            <p>Discover your next favourite. Bring your own authorized sources. Watch your way.</p>
+            <div class="hero-actions">
+              <button class="primary-button" id="explore-button"><span>Explore titles</span><span aria-hidden="true">↗</span></button>
+              <button class="secondary-button" data-view="settings">Manage sources</button>
+            </div>
+            <div class="hero-foot"><span class="tiny-orb"></span> Metadata-led. Source-flexible. Yours.</div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-glow"></div><div class="art-card art-card-back"></div>
+            <div class="art-card art-card-mid"></div>
+            <div class="art-card art-card-front"><div class="art-sun"></div><div class="art-mountain m1"></div><div class="art-mountain m2"></div><div class="art-caption">THE NEXT<br>CHAPTER</div></div>
+            <div class="floating-chip chip-top">✦ Curated for you</div>
+            <div class="floating-chip chip-bottom"><span class="chip-dot"></span> Your library, connected</div>
+          </div>
+        </div>
+        <section class="content-section">
+          <div class="section-heading"><div><span class="eyebrow">START EXPLORING</span><h2>Find your next obsession</h2></div><button class="text-button" data-view="discover">View all <span>→</span></button></div>
+          <div class="filter-row" id="home-filters">
+            <button class="filter-chip selected" data-filter="all">For you</button><button class="filter-chip" data-filter="movie">Movies</button><button class="filter-chip" data-filter="series">Series</button>
+          </div>
+          <div id="home-grid" class="poster-grid"></div>
+        </section>
+        <section class="content-section">
+          <div class="section-heading"><div><span class="eyebrow">YOUR COLLECTION</span><h2>Pick up where you left off</h2></div></div>
+          <div id="recent-grid" class="poster-grid compact-grid"></div>
+        </section>
+      </section>
+
+      <section id="discover-view" class="view">
+        <div class="page-intro"><span class="eyebrow">THE DISCOVERY ROOM</span><h1>Find something <span class="gradient-text">good.</span></h1><p>Search the catalog or narrow things down by type.</p></div>
+        <div class="search-panel"><span class="search-glyph"></span><input id="search-input" type="search" placeholder="Search movies, series, people…" autocomplete="off"><button id="clear-search" class="clear-button" aria-label="Clear search">×</button></div>
+        <div class="filter-row" id="discover-filters"><button class="filter-chip selected" data-filter="all">Everything</button><button class="filter-chip" data-filter="movie">Movies</button><button class="filter-chip" data-filter="series">Series</button></div>
+        <div class="results-meta"><span id="results-label">Popular picks</span><span id="results-count"></span></div>
+        <div id="discover-grid" class="poster-grid"></div>
+        <p class="footnote" id="catalog-note">Cinemeta metadata is loaded independently from your source providers.</p>
+      </section>
+
+      <section id="detail-view" class="view">
+        <button class="back-button" id="back-from-detail">← Back to discovery</button>
+        <div id="detail-content"></div>
+      </section>
+
+      <section id="watchlist-view" class="view">
+        <div class="page-intro"><span class="eyebrow">SAVED FOR LATER</span><h1>Your <span class="gradient-text">list.</span></h1><p>Your list syncs to your account when signed in.</p></div>
+        <div id="watchlist-grid" class="poster-grid"></div>
+      </section>
+
+      <section id="settings-view" class="view">
+        <div class="page-intro"><span class="eyebrow">MAKE IT YOURS</span><h1>Your sources, <span class="gradient-text">your rules.</span></h1><p>Sign in to keep add-ons, repositories, direct sources, and your list synced across your iPhone and desktop.</p></div>
+        <div class="settings-layout">
+          <div class="settings-card wide-card" id="account-card">
+            <div class="card-title"><div class="card-icon">◎</div><div><h2>Private account & sync</h2><p id="account-status">Not signed in. Your settings remain on this browser until you sign in.</p></div></div>
+            <form id="auth-form" class="stack-form"><label for="account-username">Username</label><input id="account-username" autocomplete="username" minlength="3" maxlength="32" placeholder="Your username" required><label for="account-password">Password</label><input id="account-password" type="password" autocomplete="current-password" minlength="10" maxlength="128" placeholder="At least 10 characters" required><div class="auth-actions"><button class="primary-button" type="submit" id="login-button">Sign in <span>↗</span></button><button class="secondary-button" type="button" id="register-button">Create account</button><button class="secondary-button" type="button" id="logout-button" hidden>Sign out</button></div><p class="form-note">Use a unique password. Passwords are hashed on the server; never share your password. Account creation requires the Cloudflare D1 setup in the README.</p></form>
+          </div>
+          <div class="settings-card wide-card">
+            <div class="card-title"><div class="card-icon">✦</div><div><h2>Metadata provider</h2><p>Kept separate from catalogs and stream providers.</p></div></div>
+            <div class="provider-status"><span class="status-dot"></span><div><strong>Cinemeta</strong><p>Default metadata · search · movie and series details</p></div><span class="status-label">Built in</span></div>
+            <p class="form-note">Cinemeta supplies title metadata only. Stremio add-ons and direct sources are queried separately, so changing a catalog add-on won't replace your metadata provider.</p>
+          </div>
+          <div class="settings-card">
+            <div class="card-title"><div class="card-icon">⌘</div><div><h2>Stremio add-ons</h2><p>Add a Stremio-compatible HTTPS manifest. The app detects its resources.</p></div></div>
+            <form id="addon-form" class="stack-form"><label for="addon-url">Manifest URL</label><input id="addon-url" type="url" placeholder="https://example.com/manifest.json" required><button class="primary-button" type="submit">Inspect & add <span>＋</span></button><p class="form-note">Sign in first for cross-device sync. Only add trusted, authorized providers. Some private/configured add-ons may require their final manifest URL.</p></form>
+            <div id="addon-list" class="settings-list"></div>
+          </div>
+          <div class="settings-card">
+            <div class="card-title"><div class="card-icon">◇</div><div><h2>CloudStream repositories</h2><p>Save repositories separately from Stremio add-ons.</p></div></div>
+            <form id="cloudstream-form" class="stack-form"><label for="repo-name">Repository label</label><input id="repo-name" type="text" placeholder="My CloudStream repo" required><label for="repo-url">Repository URL</label><input id="repo-url" type="url" placeholder="https://example.com/repo.json" required><label for="adapter-url">Optional compatible HTTP adapter URL</label><input id="adapter-url" type="url" placeholder="https://adapter.example/api (optional)"><button class="primary-button" type="submit">Save repository <span>＋</span></button><p class="form-note">Repository URLs are saved and synced. CloudStream plugins do not run directly in Safari; playable results require a compatible documented HTTP adapter.</p></form>
+            <div id="cloudstream-list" class="settings-list"></div>
+            <div class="provider-search-panel">
+              <h3>Search enabled CloudStream adapters</h3>
+              <p class="form-note">Search runs only against adapters you configure. Try a title to check whether a provider returns playable HTTPS results.</p>
+              <form id="cloudstream-search-form" class="stack-form provider-search-form">
+                <label for="cs-search-query">Movie or series title</label><input id="cs-search-query" type="search" placeholder="e.g. Interstellar" required>
+                <label for="cs-search-type">Content type</label><select id="cs-search-type"><option value="movie">Movie</option><option value="series">Series</option></select>
+                <button class="primary-button" type="submit">Search enabled providers <span>⌕</span></button>
+              </form>
+              <div id="cloudstream-search-results" class="settings-list" aria-live="polite"></div>
+            </div>
+          </div>
+          <div class="settings-card wide-card">
+            <div class="card-title"><div class="card-icon">↗</div><div><h2>Direct HTTPS sources</h2><p>Store your own authorized MP4, HLS/M3U8, or other HTTPS media URLs.</p></div></div>
+            <form id="direct-form" class="stack-form"><label for="direct-title">Source label / title</label><input id="direct-title" type="text" placeholder="e.g. My home video" required><label for="direct-url">HTTPS media URL</label><input id="direct-url" type="url" placeholder="https://your-domain.example/video.mp4" required><button class="primary-button" type="submit">Save source <span>＋</span></button><p class="form-note">VLC handoff depends on iOS, the installed VLC version, and stream compatibility. No media is hosted by RaahimFlix.</p></form>
+            <div id="direct-list" class="settings-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <button class="mobile-nav-item active" data-view="home"><span>⌂</span>Home</button>
+      <button class="mobile-nav-item" data-view="discover"><span>⌕</span>Discover</button>
+      <button class="mobile-nav-item" data-view="watchlist"><span>♡</span>My List</button>
+      <button class="mobile-nav-item" data-view="settings"><span>⚙</span>Sources</button>
+    </nav>
+    <footer class="site-footer"><span>RAAHIMFLIX <span class="brand-accent">●</span></span><span>Personal media companion · No hosted media</span></footer>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+  </script>
+</body>
+</html>
